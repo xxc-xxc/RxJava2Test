@@ -479,6 +479,8 @@ public class MainTest {
         subject.onComplete();
     }
 
+    // ========================RxJava2的创建操作符===============================
+
     /**
      * create操作符
      */
