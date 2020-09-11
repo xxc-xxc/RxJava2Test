@@ -8,24 +8,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.xxc.rxjava2test.R;
 import com.xxc.rxjava2test.utils.LogUtils;
-import com.xxc.rxjava2test.utils.NotificationUtils;
-import com.xxc.rxjava2test.widget.ZoomImageView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,11 +32,14 @@ import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.zoom_image)
     PhotoView zoomImage;
+    @BindView(R.id.btn_rv)
+    Button btnRv;
     private Button mButton;
     private static final int REQ_CROP = 873;
     private static final int REQ_PIC = 434;
@@ -263,6 +263,17 @@ public class MainActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @OnClick({R.id.btn_rv, R.id.button})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_rv:
+                startActivity(new Intent(this, NotificationActivity.class));
+                break;
+            case R.id.button:
+                break;
         }
     }
 }
