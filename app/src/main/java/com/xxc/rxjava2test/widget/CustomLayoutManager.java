@@ -102,12 +102,12 @@ public class CustomLayoutManager extends RecyclerView.LayoutManager {
         //计算childView的大小
         measureChildWithMargins(childPosition, 0, 0);
         int childWidth = getDecoratedMeasuredWidth(childPosition);
-        int childHeigth = getDecoratedMeasuredHeight(childPosition);
+        int childHeight = getDecoratedMeasuredHeight(childPosition);
         if (direction == ADD_RIGHT) {
             //layout childView
-            layoutDecorated(childPosition, offset, 0, offset + childWidth, childHeigth);
+            layoutDecorated(childPosition, offset, 0, offset + childWidth, childHeight);
         } else {
-            layoutDecorated(childPosition, offset - childWidth, 0, offset, childHeigth);
+            layoutDecorated(childPosition, offset - childWidth, 0, offset, childHeight);
         }
         return childWidth;
     }
@@ -118,7 +118,84 @@ public class CustomLayoutManager extends RecyclerView.LayoutManager {
         }
     }
 
-//    detachAndScrapAttachedViews(recycler); // 分离所有的itemView
+    @Override
+    public boolean canScrollHorizontally() {
+        return true;
+    }
+
+    @Override
+    public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
+        // 回收不可见的childView
+        recyclerUnVisibleView(recycler, dx);
+        // 将出现的childView布局出来
+        int willScroll = fillChild(recycler, dx, state);
+        // 水平方向移动childView
+        offsetChildrenHorizontal(-willScroll);
+        return willScroll;
+    }
+
+    private int fillChild(RecyclerView.Recycler recycler, int dx, RecyclerView.State state) {
+        if (dx > 0) {//RecyclerView从右往左滑动时
+            //得到最后一个可见childview
+            View lastView = getChildAt(getChildCount() - 1);
+            //得到将显示的childView 在adapter 中的position
+            int position = getPosition(lastView) + 1;
+            //得到最后一个可见childView右边的偏移
+            int offset = helper.getDecoratedEnd(lastView);
+            //判断是否有足够的空间
+            if (offset - dx < getWidth() - getPaddingRight()) {
+                //item 足够
+                if (position < state.getItemCount()) {
+                    layoutScrapRight(recycler, position, offset);
+                } else {
+                    //item 不足 返回新的可滚动的宽度
+                    return offset - getWidth() + getPaddingRight();
+                }
+            }
+        } else {//RecyclerView从左往右滑动时
+            //得到第一个可见childview
+            View firstView = getChildAt(0);
+            //得到将显示的childView 在adapter 中的position
+            int position = getPosition(firstView) - 1;
+            //得到第一个可见childView左边的偏移
+            int offset = helper.getDecoratedStart(firstView);
+            //判断是否有足够的空间
+            if (offset - dx > getPaddingLeft()) {
+                //item 足够
+                if (position >= 0) {
+                    layoutScrapLeft(recycler, position, offset);
+                } else {
+                    //item 不足 返回新的可滚动的宽度
+                    return offset - getPaddingLeft();
+                }
+            }
+        }
+        return dx;
+    }
+
+    /**
+     * 回收不可见的childview
+     */
+    private void recyclerUnVisibleView(RecyclerView.Recycler recycler, int dx) {
+        for (int i = 0; i < getChildCount(); i++) {
+            View child = getChildAt(i);
+            if (dx > 0) {//RecyclerView从右往左滑动时
+                //将左边消失的childView 回收掉
+                if (helper.getDecoratedEnd(child) - dx < getPaddingLeft()) {
+                    removeAndRecycleView(child, recycler);
+                    break;
+                }
+            } else {//RecyclerView从左往右滑动时
+                //将右边的childView 回收掉
+                if (helper.getDecoratedStart(child) - dx > getWidth() - getPaddingRight()) {
+                    removeAndRecycleView(child, recycler);
+                    break;
+                }
+            }
+        }
+    }
+
+    //    detachAndScrapAttachedViews(recycler); // 分离所有的itemView
 //    int offsetX = 0;
 //    int offsetY = 0;
 //

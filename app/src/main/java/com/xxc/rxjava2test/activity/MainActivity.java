@@ -20,9 +20,10 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.chrisbanes.photoview.PhotoView;
+import com.jakewharton.rxbinding3.view.RxView;
 import com.xxc.rxjava2test.R;
 import com.xxc.rxjava2test.utils.LogUtils;
+import com.xxc.rxjava2test.widget.IOSLoadingView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,9 +38,11 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.zoom_image)
-    PhotoView zoomImage;
+    IOSLoadingView zoomImage;
     @BindView(R.id.btn_rv)
     Button btnRv;
+    @BindView(R.id.rx_binding)
+    Button rxBinding;
     private Button mButton;
     private static final int REQ_CROP = 873;
     private static final int REQ_PIC = 434;
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(intent, REQ_PIC);
         });
 
-        zoomImage.setImageResource(R.drawable.ic_launcher_background);
+//        zoomImage.setImageResource(R.drawable.ic_launcher_background);
         // /data/data/com.xxc.rxjava2test/files
         LogUtils.d(TAG, "getFilesDir ===> " + getFilesDir().getAbsolutePath());
 
@@ -266,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.btn_rv, R.id.button})
+    @OnClick({R.id.btn_rv, R.id.button, R.id.rx_binding})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_rv:
@@ -274,7 +277,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.button:
                 break;
+            case R.id.rx_binding:
+                startActivity(new Intent(this, RxBindingActivity.class));
+                break;
         }
     }
+
 }
 

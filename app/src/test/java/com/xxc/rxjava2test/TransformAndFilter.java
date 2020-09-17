@@ -42,9 +42,7 @@ public class TransformAndFilter {
                 .subscribe(stringIntegerGroupedObservable -> {
 //                    System.out.println(stringIntegerGroupedObservable.getKey());
                     if (stringIntegerGroupedObservable.getKey().equalsIgnoreCase("偶数")) {
-                        stringIntegerGroupedObservable.subscribe(integer -> {
-                            System.out.println(integer);
-                        });
+                        stringIntegerGroupedObservable.subscribe(System.out::println);
                     }
                 });
     }

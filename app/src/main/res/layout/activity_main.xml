@@ -22,13 +22,20 @@
         app:layout_constraintBottom_toTopOf="@id/button"/>
 
     <Button
+        android:id="@+id/rx_binding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RxBinding使用"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@id/button"/>
+    <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="选择图片"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <com.xxc.rxjava2test.widget.IOSLoadingView
         android:id="@+id/zoom_image"
         android:layout_width="200dp"
         android:layout_height="200dp"
