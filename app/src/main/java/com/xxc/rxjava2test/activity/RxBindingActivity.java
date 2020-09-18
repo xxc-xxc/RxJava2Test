@@ -31,10 +31,10 @@ public class RxBindingActivity extends AppCompatActivity {
                 .throttleFirst(2, TimeUnit.SECONDS)
                 .subscribe(unit -> {
                     /** 倒计时60秒，一次1秒 */
-                    CountDownTimer timer = new CountDownTimer(60*1000, 1000) {
+                    rxBinding.setClickable(false);
+                    CountDownTimer timer = new CountDownTimer(6*1000, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            rxBinding.setClickable(false);
                             rxBinding.setText("还剩"+millisUntilFinished/1000+"秒");
                         }
                         @Override
