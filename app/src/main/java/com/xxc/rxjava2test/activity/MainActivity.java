@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.jakewharton.rxbinding3.view.RxView;
+import com.trello.rxlifecycle3.components.support.RxAppCompatActivity;
 import com.xxc.rxjava2test.R;
 import com.xxc.rxjava2test.utils.LogUtils;
 import com.xxc.rxjava2test.widget.IOSLoadingView;
@@ -34,8 +35,11 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends RxAppCompatActivity {
 
     @BindView(R.id.zoom_image)
     IOSLoadingView zoomImage;
@@ -281,6 +285,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, RxBindingActivity.class));
                 break;
         }
+    }
+
+    private void testLifecycle() {
+        Disposable disposable = Observable.just(1, 2, 3)
+                .compose(bindToLifecycle())
+                .subscribe(System.out::println);
     }
 
 }
